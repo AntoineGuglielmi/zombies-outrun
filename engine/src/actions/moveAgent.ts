@@ -1,4 +1,5 @@
 import { GameState, AgentId, Position } from '../GameState'
+import { TileType } from '../enums'
 
 export type MoveAgentAction = {
   agentId: AgentId
@@ -15,7 +16,6 @@ export function moveAgent(
     throw new Error(`Agent ${action.agentId} not found`)
   }
 
-  // Vérification : déplacement d'une case maximum (Manhattan)
   const dx = Math.abs(agent.position.x - action.to.x)
   const dy = Math.abs(agent.position.y - action.to.y)
 
@@ -23,7 +23,6 @@ export function moveAgent(
     throw new Error('Invalid move: agent can only move by 1 tile')
   }
 
-  // Vérification : une tuile existe à la position cible
   const targetTile = Object.values(state.tiles).find(
     (tile) =>
       tile.position.x === action.to.x && tile.position.y === action.to.y,
@@ -33,7 +32,11 @@ export function moveAgent(
     throw new Error('Invalid move: no tile at target position')
   }
 
-  // Application du déplacement (immutabilité)
+  // 🚧 NOUVELLE RÈGLE : accès aux pièces
+  if (targetTile.type === TileType.TP) {
+    throw new Error('Invalid move: cannot enter a room without an access rule')
+  }
+
   return {
     ...state,
     agents: {

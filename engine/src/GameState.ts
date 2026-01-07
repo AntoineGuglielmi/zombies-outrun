@@ -1,3 +1,5 @@
+import { TileType, AgentType, AgentRole, ResourceType } from './enums'
+
 export type TileId = string
 export type AgentId = string
 
@@ -6,20 +8,27 @@ export type Position = {
   y: number
 }
 
-export type TileType = 'TD' | 'TC' | 'TP' | 'TE'
+export type RoomLootTable = Partial<Record<ResourceType, number>>
+export type FurtifBonusTable = Partial<Record<ResourceType, number>>
 
 export type Tile = {
   id: TileId
   type: TileType
   position: Position
-}
 
-export type AgentType = 'player' | 'zombie' | 'injured'
+  // spécifique aux pièces (TP)
+  trapped?: boolean
+  lootTable?: RoomLootTable
+  furtifBonus?: FurtifBonusTable
+}
 
 export type Agent = {
   id: AgentId
   type: AgentType
   position: Position
+
+  // uniquement pour les joueurs
+  role?: AgentRole
 }
 
 export type GameState = {
