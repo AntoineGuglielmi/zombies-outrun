@@ -25,3 +25,9 @@ export enum ResourceType {
   Croissant = 'Croissant',
   Munition = 'Munition',
 }
+
+export enum ZombieType {
+  ZL = 'ZombieLent',
+  ZR = 'ZombieRapide',
+  ZS = 'ZombieSniper',
+}
