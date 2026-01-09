@@ -33,12 +33,10 @@ export function searchRoom(
   /*                            Access restrictions                         */
   /* ---------------------------------------------------------------------- */
 
-  // Piège
   if (room.trapped && agent.role !== AgentRole.Furtif) {
     throw new Error('Only the furtif can search a trapped room')
   }
 
-  // Verrou
   if (room.locked && agent.role !== AgentRole.Costaud) {
     throw new Error('Only the costaud can search a locked room first')
   }
@@ -47,7 +45,7 @@ export function searchRoom(
   /*                        Dépiégeage / déverrouillage                      */
   /* ---------------------------------------------------------------------- */
 
-  let updatedRoom = { ...room }
+  const updatedRoom = { ...room }
 
   if (room.trapped && agent.role === AgentRole.Furtif) {
     updatedRoom.trapped = false
@@ -71,13 +69,11 @@ export function searchRoom(
     if (!threshold) continue
 
     let effectiveThreshold = threshold
-
     if (agent.role === AgentRole.Furtif) {
       effectiveThreshold = threshold - (furtifBonus[resource] ?? 1)
     }
 
     const roll = rollDie()
-
     if (roll >= effectiveThreshold) {
       foundResources[resource] = (foundResources[resource] ?? 0) + 1
     }
@@ -86,6 +82,20 @@ export function searchRoom(
   /* ---------------------------------------------------------------------- */
   /*                          Apply state changes                           */
   /* ---------------------------------------------------------------------- */
+
+  // Mise à jour de l’inventaire
+  const updatedInventory = {
+    ...agent.inventory,
+    resources: {
+      ...agent.inventory.resources,
+      ...Object.fromEntries(
+        Object.entries(foundResources).map(([res, qty]) => [
+          res,
+          (agent.inventory.resources[res as ResourceType] ?? 0) + qty,
+        ]),
+      ),
+    },
+  }
 
   return {
     ...state,
@@ -98,9 +108,8 @@ export function searchRoom(
       [agent.id]: {
         ...agent,
         actionsLeft: agent.actionsLeft - 1,
-        // ⚠️ stockage de l’inventaire à venir
+        inventory: updatedInventory,
       },
     },
-    // ⚠️ distribution des ressources à venir
   }
 }

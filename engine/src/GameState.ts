@@ -4,6 +4,7 @@ import {
   AgentRole,
   ResourceType,
   ZombieType,
+  CraftableItemType,
 } from './enums'
 
 /* -------------------------------------------------------------------------- */
@@ -63,6 +64,14 @@ export type Tile = {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                                 Inventory                                  */
+/* -------------------------------------------------------------------------- */
+export type Inventory = {
+  resources: Partial<Record<ResourceType, number>>
+  items: Partial<Record<CraftableItemType, number>>
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                   Agents                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -77,6 +86,8 @@ export type Agent = {
   location: AgentLocation
   actionsLeft: number
   health: number
+  inventory: Inventory
+  isNPC?: boolean // blessé
 }
 
 /* -------------------------------------------------------------------------- */

@@ -31,3 +31,9 @@ export enum ZombieType {
   ZR = 'ZombieRapide',
   ZS = 'ZombieSniper',
 }
+
+export enum CraftableItemType {
+  PointDeVie = 'PointDeVie',
+  Bombe = 'Bombe',
+  Munition = 'Munition',
+}
