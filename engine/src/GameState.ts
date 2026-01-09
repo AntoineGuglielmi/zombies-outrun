@@ -50,16 +50,14 @@ export type Tile = {
   id: TileId
   type: TileType
 
-  // position = coin haut-gauche
   position: Position
-
-  // dimensions
   width: number
   height: number
 
   // TP uniquement
   doors?: Door[]
   trapped?: boolean
+  locked?: boolean
   lootTable?: RoomLootTable
   furtifBonus?: FurtifBonusTable
 }
